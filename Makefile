@@ -68,27 +68,6 @@ install/strip/fast: preinstall/fast
 	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\" \"libprotobuf\" \"libprotobuf-lite\" \"libprotoc\" \"protobuf-export\" \"protobuf-headers\" \"protobuf-protos\" \"protoc\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -101,17 +80,6 @@ install/local/fast: preinstall/fast
 	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -123,6 +91,38 @@ install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
 	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\" \"libprotobuf\" \"libprotobuf-lite\" \"libprotoc\" \"protobuf-export\" \"protobuf-headers\" \"protobuf-protos\" \"protoc\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/hj/Desktop/programFiles/ide/clion/clion-2019.2.3/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -155,6 +155,19 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named libraft_client
+
+# Build rule for target.
+libraft_client: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 libraft_client
+.PHONY : libraft_client
+
+# fast build rule for target.
+libraft_client/fast:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/build
+.PHONY : libraft_client/fast
 
 #=============================================================================
 # Target rules for targets named libraft
@@ -988,6 +1001,60 @@ example64/fast:
 	$(MAKE) -f third_party/grpc/third_party/zlib/CMakeFiles/example64.dir/build.make third_party/grpc/third_party/zlib/CMakeFiles/example64.dir/build
 .PHONY : example64/fast
 
+client/StudentClient.o: client/StudentClient.cc.o
+
+.PHONY : client/StudentClient.o
+
+# target to build an object file
+client/StudentClient.cc.o:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/StudentClient.cc.o
+.PHONY : client/StudentClient.cc.o
+
+client/StudentClient.i: client/StudentClient.cc.i
+
+.PHONY : client/StudentClient.i
+
+# target to preprocess a source file
+client/StudentClient.cc.i:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/StudentClient.cc.i
+.PHONY : client/StudentClient.cc.i
+
+client/StudentClient.s: client/StudentClient.cc.s
+
+.PHONY : client/StudentClient.s
+
+# target to generate assembly for a file
+client/StudentClient.cc.s:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/StudentClient.cc.s
+.PHONY : client/StudentClient.cc.s
+
+client/clientMain.o: client/clientMain.cc.o
+
+.PHONY : client/clientMain.o
+
+# target to build an object file
+client/clientMain.cc.o:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/clientMain.cc.o
+.PHONY : client/clientMain.cc.o
+
+client/clientMain.i: client/clientMain.cc.i
+
+.PHONY : client/clientMain.i
+
+# target to preprocess a source file
+client/clientMain.cc.i:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/clientMain.cc.i
+.PHONY : client/clientMain.cc.i
+
+client/clientMain.s: client/clientMain.cc.s
+
+.PHONY : client/clientMain.s
+
+# target to generate assembly for a file
+client/clientMain.cc.s:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/client/clientMain.cc.s
+.PHONY : client/clientMain.cc.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -1021,6 +1088,7 @@ proto-gen/Student.grpc.pb.o: proto-gen/Student.grpc.pb.cc.o
 
 # target to build an object file
 proto-gen/Student.grpc.pb.cc.o:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.grpc.pb.cc.o
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.grpc.pb.cc.o
 .PHONY : proto-gen/Student.grpc.pb.cc.o
 
@@ -1030,6 +1098,7 @@ proto-gen/Student.grpc.pb.i: proto-gen/Student.grpc.pb.cc.i
 
 # target to preprocess a source file
 proto-gen/Student.grpc.pb.cc.i:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.grpc.pb.cc.i
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.grpc.pb.cc.i
 .PHONY : proto-gen/Student.grpc.pb.cc.i
 
@@ -1039,6 +1108,7 @@ proto-gen/Student.grpc.pb.s: proto-gen/Student.grpc.pb.cc.s
 
 # target to generate assembly for a file
 proto-gen/Student.grpc.pb.cc.s:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.grpc.pb.cc.s
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.grpc.pb.cc.s
 .PHONY : proto-gen/Student.grpc.pb.cc.s
 
@@ -1048,6 +1118,7 @@ proto-gen/Student.pb.o: proto-gen/Student.pb.cc.o
 
 # target to build an object file
 proto-gen/Student.pb.cc.o:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.pb.cc.o
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.pb.cc.o
 .PHONY : proto-gen/Student.pb.cc.o
 
@@ -1057,6 +1128,7 @@ proto-gen/Student.pb.i: proto-gen/Student.pb.cc.i
 
 # target to preprocess a source file
 proto-gen/Student.pb.cc.i:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.pb.cc.i
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.pb.cc.i
 .PHONY : proto-gen/Student.pb.cc.i
 
@@ -1066,8 +1138,36 @@ proto-gen/Student.pb.s: proto-gen/Student.pb.cc.s
 
 # target to generate assembly for a file
 proto-gen/Student.pb.cc.s:
+	$(MAKE) -f CMakeFiles/libraft_client.dir/build.make CMakeFiles/libraft_client.dir/proto-gen/Student.pb.cc.s
 	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/proto-gen/Student.pb.cc.s
 .PHONY : proto-gen/Student.pb.cc.s
+
+server/StudentServer.o: server/StudentServer.cc.o
+
+.PHONY : server/StudentServer.o
+
+# target to build an object file
+server/StudentServer.cc.o:
+	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/server/StudentServer.cc.o
+.PHONY : server/StudentServer.cc.o
+
+server/StudentServer.i: server/StudentServer.cc.i
+
+.PHONY : server/StudentServer.i
+
+# target to preprocess a source file
+server/StudentServer.cc.i:
+	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/server/StudentServer.cc.i
+.PHONY : server/StudentServer.cc.i
+
+server/StudentServer.s: server/StudentServer.cc.s
+
+.PHONY : server/StudentServer.s
+
+# target to generate assembly for a file
+server/StudentServer.cc.s:
+	$(MAKE) -f CMakeFiles/libraft.dir/build.make CMakeFiles/libraft.dir/server/StudentServer.cc.s
+.PHONY : server/StudentServer.cc.s
 
 # Help Target
 help:
@@ -1076,12 +1176,13 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
-	@echo "... edit_cache"
+	@echo "... install/local"
+	@echo "... libraft_client"
+	@echo "... install"
 	@echo "... libraft"
 	@echo "... list_install_components"
-	@echo "... install/local"
+	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... install"
 	@echo "... tools"
 	@echo "... check_epollexclusive"
 	@echo "... gen_legal_metadata_characters"
@@ -1145,6 +1246,12 @@ help:
 	@echo "... minigzip"
 	@echo "... minigzip64"
 	@echo "... example64"
+	@echo "... client/StudentClient.o"
+	@echo "... client/StudentClient.i"
+	@echo "... client/StudentClient.s"
+	@echo "... client/clientMain.o"
+	@echo "... client/clientMain.i"
+	@echo "... client/clientMain.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -1154,6 +1261,9 @@ help:
 	@echo "... proto-gen/Student.pb.o"
 	@echo "... proto-gen/Student.pb.i"
 	@echo "... proto-gen/Student.pb.s"
+	@echo "... server/StudentServer.o"
+	@echo "... server/StudentServer.i"
+	@echo "... server/StudentServer.s"
 .PHONY : help
 
 

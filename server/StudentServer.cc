@@ -13,7 +13,7 @@ using student::StudentService;
 class StudentServerImpl final : public StudentService::Service {
     Status sendStudent(ServerContext* context, const Student* studentReq,
             Reply* reply) override {
-        std::string prefix("Hello ");
+        std::string prefix("Bye ");
         reply->set_message(prefix + studentReq->name());
         return Status::OK;
     }

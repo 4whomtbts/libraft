@@ -35,6 +35,7 @@ set(student_proto_srcs "${proto_gen_dir}/Student.pb.cc")
 set(student_proto_hdrs "${proto_gen_dir}/Student.pb.h")
 set(student_grpc_srcs "${proto_gen_dir}/Student.grpc.pb.cc")
 set(student_grpc_hdrs "${proto_gen_dir}/Student.grpc.pb.h")
+
 get_filename_component(abs_proto "proto/Student.proto" ABSOLUTE)
 get_filename_component(proto_path "${abs_proto}" PATH)
 
@@ -51,24 +52,48 @@ add_custom_command(
 
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
-foreach(_target
-        StudentServer StudentClient)
-    ADD_EXECUTABLE(${_target}
-            main.cpp
-            proto-gen
-            "${_target}.cc"
-            ${student_proto_srcs}
-            ${student_grpc_srcs})
-    TARGET_INCLUDE_DIRECTORIES(${_target}
-            PUBLIC
-            server
-            ${proto_gen_dir}
-            ${CMAKE_CURRENT_BINARY_DIR})
+ADD_EXECUTABLE(
+        libraft
+        main.cpp
+        server/StudentServer.cc
+        ${student_proto_srcs}
+        ${student_grpc_srcs}
+)
 
-    TARGET_LINK_LIBRARIES(${_target}
-            PUBLIC
-            ${_GRPC_GRPCPP_UNSECURE}
-            ${_PROTOBUF_LIBPROTOBUF})
-endforeach()
+SET_TARGET_PROPERTIES(libraft
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY build)
+
+TARGET_INCLUDE_DIRECTORIES(libraft
+        PUBLIC
+        server
+        client
+        ${proto_gen_dir}
+        ${CMAKE_CURRENT_BINARY_DIR})
+
+TARGET_LINK_LIBRARIES(libraft
+        PUBLIC
+        ${_GRPC_GRPCPP_UNSECURE}
+        ${_PROTOBUF_LIBPROTOBUF})
+
+ADD_EXECUTABLE(libraft_client
+        client/StudentClient.cc
+        client/clientMain.cc
+        ${student_proto_srcs}
+        ${student_grpc_srcs})
+
+TARGET_INCLUDE_DIRECTORIES(libraft_client
+        PUBLIC
+        client
+        ${proto_gen_dir}
+        ${CMAKE_CURRENT_BINARY_DIR})
+
+TARGET_LINK_LIBRARIES(libraft_client
+        PUBLIC
+        ${_GRPC_GRPCPP_UNSECURE}
+        ${_PROTOBUF_LIBPROTOBUF})
+
+
+
 
 
