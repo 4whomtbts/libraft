@@ -1,47 +1,74 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5.1)
 project(libRaft)
-SET(CMAKE_CXX_FLAGS "-g -Wall -Werror -std=c++11")
-SET (_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
-SET (student_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/Student.grpc.pb.cc")
-SET (student_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/Student.grpc.pb.h")
+SET(CMAKE_CXX_FLAGS "-pthread -g -std=c++11")
+SET (tp_grpc ${CMAKE_CURRENT_SOURCE_DIR}/third-party/grpc)
+SET (proto_dir "${CMAKE_CURRENT_SOURCE_DIR}/proto")
+SET(proto_gen_dir "${CMAKE_CURRENT_SOURCE_DIR}/proto-gen")
+
+file(GLOB_RECURSE proto_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.proto)
+# Absolute paths of .proto files to be passed to protoc program
+set(ABSProtoFiles)
+# Absolute paths of generated .h and .cc
+set(ProtoHeaders)
+set(ProtoSources)
+include_directories(${ProtoHeaders})
+
+ADD_SUBDIRECTORY(./third_party/grpc ${CMAKE_CURRENT_BINARY_DIR}/third_party/grpc EXCLUDE_FROM_ALL)
+
+message(STATUS "Using gRPC via add_subdirectory.")
+
+# After using add_subdirectory, we can now use the grpc targets directly from
+# this build.
+set(_PROTOBUF_LIBPROTOBUF libprotobuf)
+set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
+set(_GRPC_GRPCPP_UNSECURE grpc++_unsecure)
+set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
+
+get_filename_component(hw_proto "proto/helloworld.proto" ABSOLUTE)
+get_filename_component(hw_proto_path "${hw_proto}" PATH)
+
+LIST(APPEND proto_source_list)
+LIST(APPEND proto_header_list)
 
 
+set(student_proto_srcs "${proto_gen_dir}/Student.pb.cc")
+set(student_proto_hdrs "${proto_gen_dir}/Student.pb.h")
+set(student_grpc_srcs "${proto_gen_dir}/Student.grpc.pb.cc")
+set(student_grpc_hdrs "${proto_gen_dir}/Student.grpc.pb.h")
+get_filename_component(abs_proto "proto/Student.proto" ABSOLUTE)
+get_filename_component(proto_path "${abs_proto}" PATH)
 
-find_package(Protobuf REQUIRED)
-find_package(gRPC CONFIG REQUIRED)
-
-message(STATUS "Using gRPC ${gRPC_VERSION}")
-set(_GRPC_GRPCPP_UNSECURE gRPC::grpc++_unsecure)
-set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
-
-if(PROTOBUF_FOUND)
-    message ("PROTOBUF IS FOUND")
-endif()
-
-PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS proto/Student.proto)
-
-ADD_CUSTOM_COMMAND(
-        OUTPUT "${PROTO_SRCS}" "${PROTO_HDRS}"
-                "${student_grpc_src}" "${student_grpc_hdrs}"
+add_custom_command(
+        OUTPUT "${student_proto_srcs}" "${student_proto_hdrs}"
+        "${student_grpc_srcs}" "${student_grpc_hdrs}"
         COMMAND ${_PROTOBUF_PROTOC}
-        ARGS --grpc-out "${CMAKE_CURRENT_BINARY_DIR}"
-            --cpp_out "${CMAKE_CURRENT_BINARY_DIR}"
-            -I "${CMAKE_CURRENT_BINARY_DIR}"
-            --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
-            "${CMAKE_CURRENT_BINARY_DIR}"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}")
+        ARGS --grpc_out "${proto_gen_dir}"
+        --cpp_out "${proto_gen_dir}"
+        -I "${proto_path}"
+        --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
+        "${abs_proto}"
+        DEPENDS "${abs_proto}")
+
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
+foreach(_target
+        StudentServer StudentClient)
+    ADD_EXECUTABLE(${_target}
+            main.cpp
+            proto-gen
+            "${_target}.cc"
+            ${student_proto_srcs}
+            ${student_grpc_srcs})
+    TARGET_INCLUDE_DIRECTORIES(${_target}
+            PUBLIC
+            server
+            ${proto_gen_dir}
+            ${CMAKE_CURRENT_BINARY_DIR})
+
+    TARGET_LINK_LIBRARIES(${_target}
+            PUBLIC
+            ${_GRPC_GRPCPP_UNSECURE}
+            ${_PROTOBUF_LIBPROTOBUF})
+endforeach()
 
 
-MESSAGE ("PROTO_SRCS = ${PROTO_SRCS}")
-MESSAGE ("PROTO_HDRS = ${PROTO_HDRS}")
-
-ADD_EXECUTABLE(libraft main.cpp ${PROTO_SRCS} ${PROTO_HDRS} server/StudentServer.cc server/StudentServer.h)
-
-TARGET_INCLUDE_DIRECTORIES(libraft
-        PUBLIC
-        ${PROTOBUF_INCLUDE_DIRS}
-        ${CMAKE_CURRENT_BINARY_DIR})
-
-TARGET_LINK_LIBRARIES(libraft
-        PUBLIC
-        ${PROTOBUF_LIBRARIES})

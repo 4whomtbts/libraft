@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package student;
+
+message Student {
+    int64 studentID = 1;
+    string name = 2;
+    string dept = 3;
+    string major = 4;
+    string GPA = 5;
+
+    enum PhoneType {
+        MOBILE = 0;
+        HOME = 1;
+        LAB = 2;
+    }
+
+    message PhoneNumber {
+        string number = 1;
+        PhoneType type = 2;
+    }
+    repeated PhoneNumber phones = 6;
+}
+
+message Reply {
+    string message = 1;
+}
+
+service StudentService {
+    rpc sendStudent (Student) returns (Reply) {}
+}
